@@ -4,13 +4,17 @@ import Hatspage from "./pages/hatspage/hatspage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import ShopPage from "./pages/shop/shop";
+import Header from "./components/header/header";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/shop" element={<ShopPage />} />
-    </Routes>
+    <div>
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/shop" element={<ShopPage />} />
+      </Routes>
+    </div>
   );
 }
 
