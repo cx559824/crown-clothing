@@ -6,19 +6,36 @@ import "./App.css";
 import ShopPage from "./pages/shop/shop";
 import Header from "./components/header/header";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up";
-import { auth } from './firebase/firebase.utils'
-
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 function App() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState({
+    currentUser: null,
+  });
 
-useEffect(() => {
-  auth.onAuthStateChanged((user) => {
-    setUser(user);
-    // console.log(user.email);
-    // console.log(user.displayName);
-  }); 
-}, []);
+  useEffect(() => {
+    auth.onAuthStateChanged(
+      async (userAuth) => {
+        if (userAuth) {
+          const userRef = await createUserProfileDocument(userAuth);
+
+          userRef.onSnapshot((snapShot) => {
+            setUser({
+              currentUser: {
+                id: snapShot.id,
+                ...snapShot.data(),
+              },
+            });
+          });
+        } else if (!userAuth) {
+          setUser({ currentUser: userAuth });
+        }
+      },
+      [user]
+    );
+  }, []);
+
+  console.log(user);
 
   return (
     <div>
